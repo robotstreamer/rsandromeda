@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RobotStreamer Andromeda</title>
+  <script type="text/javascript"></script>
+  <link href="https://fonts.googleapis.com/css?family=Overpass:500,700,900" rel="stylesheet">
+  <link href="./main.css" rel="stylesheet"/>
+</head>
+
+<body>
+  <div id="title-bar">
+    <div id="appTitle">RobotStreamer Andromeda</div>
+    <div id="nav">
+      <ul>
+        <li id="commandsLink" class="navlink activelink">COMMANDS</li>
+        <li id="optionsLink" class="navlink">OPTIONS</li>
+        <li id="donationsLink" class="dim">DONATORS</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="content-bar-commands">
+    <span id="alert"></span>
+    <div class="headerContain"><span class="Header">CREATE COMMANDS</span><span class="Hint">Be sure to fill out all three fields before saving.</span></div>
+    <!-- <input type="text" placeholder="Insert desired prefix"/> -->
+    <form id="setCommands">
+      <div class="inputRow">
+        <span class="setCommandsTitle">Command Name:</span>
+        <input type="text" id="title" name="title" placeholder="Insert what you want users to type here. (ex: 'kill' turns into '!kill')"/>
+      </div>
+      <!-- <input type="text" id="action" name="action" placeholder="Insert function of new command here."/> -->
+      <div class="inputRow">
+        <span class="setCommandsTitle">Command Action:</span>
+        <select id="action" name="action">
+          <option value="changeScene">changeScene</option>
+          <option value="playAudio">playAudio</option>
+        </select>
+      </div>
+      <div class="inputRow">
+        <span class="setCommandsTitle">Action Value:</span>
+        <input type="text" id="value" name="value" placeholder="Insert special value of above action."/>
+      </div>
+      <input type="submit" id="submit" value="SAVE COMMAND"/>
+    </form>
+    <div class="headerContain"><span class="Header">EDIT COMMANDS</span><span class="Hint">Press enter when you're done editing to save your changes.</span></div>
+    <div id="list"></div>
+  </div>
+
+  <div id="content-bar-options">
+    <div class="headerContain"><span class="Header">SET ROBOT ID</span><span class="Hint">Enter the Robot ID of the stream you want to check for cmds.</span></div>
+    <input type="text" id="robotId" maxlength="3" placeholder="Place the Robot ID of your stream here." value="0"/>
+
+    <div class="headerContain"><span class="Header">SET AUDIO FILE PATH</span><span class="Hint">Enter the Path of the folder for your audio files.</span></div>
+
+    <label for="audioPath" id="audioPathLabel" class="custom-file-upload">Choose Folder</label>
+    <input type="file" id="audioPath" style="display:none;" webkitdirectory directory/>
+    <span id="displayPath"></span>
+  </div>
+
+  </body>
+  <script type="text/javascript">
+    const {ipcRenderer} = require('electron');
+    var list;
+
+    document.getElementById('commandsLink').addEventListener('click', () => openPage('commands'));
+    document.getElementById('optionsLink').addEventListener('click', () => openPage('options'));
+    document.getElementById('donationsLink').addEventListener('click', () => openPage('donations'));
+
+    function openPage(page) {
+      if (page == "commands") {
+        document.getElementById("content-bar-commands").style.display = 'block';
+        document.getElementById("commandsLink").className = 'navlink activelink';
+        document.getElementById("content-bar-options").style.display = 'none';
+        document.getElementById("optionsLink").className = 'navlink';
+      } else if (page == "options") {
+        document.getElementById("content-bar-commands").style.display = 'none';
+        document.getElementById("commandsLink").className = 'navlink';
+        document.getElementById("content-bar-options").style.display = 'block';
+        document.getElementById("optionsLink").className = 'navlink activelink';
+      }
+    }
+
+    var updateId = function() {
+      let id = document.getElementById('robotId').value;
+      if (isNaN(id) || Number(id) < 100 || id.length < 3) {
+        alert("\""+id +"\" is not a valid Robot ID");
+      } else {
+        ipcRenderer.send('updateId', id);
+      }
+    }
+    document.getElementById('robotId').onchange = updateId;
+
+    var updatePath = function() {
+      let path = document.getElementById('audioPath').files[0].path;
+      document.getElementById('audioPathLabel').innerText = path;
+      ipcRenderer.send('updatePath', path);
+    }
+    document.getElementById('audioPath').onchange = updatePath;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      list = document.getElementById("list");
+      ipcRenderer.on('getInfoReply', (event, arg) => {
+        cmds = arg[0].commands;
+        document.getElementById('robotId').value = arg[0].robotId;
+        document.getElementById('audioPathLabel').innerText = arg[0].audioPath;
+
+        for(var i = 0; i < cmds.length; i++) {
+          // list.innerHTML += `<div class="savedCommandInfo"><input type="text" class="title-edit" value="${cmds[i].title}"/> <input type="text" class="command-edit" value="${cmds[i].command}"/> <input type="text" class="detail-edit" value="${cmds[i].detail}"/><input type="submit" value="delete" id="deleteCommand"/></div>\n\n`
+          createNewCmdDiv(cmds[i].title, cmds[i].command, cmds[i].detail, cmds[i].id, list);
+        }
+      })
+      ipcRenderer.send('getInfo', "test")
+    });
+
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    var createNewCmdDiv = function(title, command, detail, id, list) {
+      let container = document.createElement('div');
+      container.className = 'savedCommandInfo';
+
+      let titleInput = document.createElement('input');
+      titleInput.type = 'text';
+      titleInput.className = 'title-edit';
+      titleInput.value = title;
+      container.appendChild(titleInput);
+
+      let commandInput = document.createElement('div');
+      commandInput.className = 'command-edit';
+      commandInput.innerText = command;
+      container.appendChild(commandInput);
+
+      let detailInput = document.createElement('input');
+      detailInput.type = 'text';
+      detailInput.className = 'detail-edit';
+      detailInput.value = detail;
+      container.appendChild(detailInput);
+
+      let deleteButtonSuckMyAssMicroNurd = document.createElement('button');
+      deleteButtonSuckMyAssMicroNurd.id = 'deleteCommand';
+      deleteButtonSuckMyAssMicroNurd.innerText = 'delete';
+      container.appendChild(deleteButtonSuckMyAssMicroNurd);
+
+      deleteButtonSuckMyAssMicroNurd.addEventListener('click', function(e) {
+        ipcRenderer.send('deleteCmd', id);
+        list.removeChild(container);
+      });
+
+      var updateInput = function() {
+        let title = titleInput.value;
+        let command = commandInput.innerText;
+        let detail = detailInput.value;
+        console.log(title,command,detail);
+        let updateJson = {
+          title: title,
+          command: command,
+          detail: detail,
+          id: id
+        };
+        ipcRenderer.send('updateCmds', updateJson);
+      }
+      titleInput.onchange = updateInput;
+      commandInput.onchange = updateInput;
+      detailInput.onchange = updateInput;
+
+      list.appendChild(container);
+    }
+
+    document.querySelector('#submit').addEventListener('click', function() {
+      let title = document.getElementById("title").value;
+      let action = document.getElementById("action").value;
+      let value = document.getElementById("value").value;
+      let alert = document.getElementById("alert");
+
+      if (action == "playAudio" && !value.includes(".mp3")) {
+        alert("playAudio commands require an mp3 file for an Action Value");
+      } else {
+        ipcRenderer.send('addCmd', {
+          title: title,
+          action: action,
+          value: value,
+          id: uuidv4()
+        });
+        // list.innerHTML += `<div class="savedCommandInfo"><input type="text" class="title-edit" value="${title}"/> <input type="text" class="command-edit" value="${action}"/> <input type="text" class="detail-edit" value="${value}"/><input type="submit" value="delete" id="deleteCommand"/></div>\n\n`
+        // createNewCmdDiv(title, action, value, list);
+      }
+
+    });
+  </script>
+</html>

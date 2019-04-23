@@ -1,0 +1,74 @@
+[
+  {
+    "robotId": "114",
+    "audioPath": "C:/Users/aydan/chatbot/audio/",
+    "commands": [
+      {
+        "title": "drums",
+        "command": "playAudio",
+        "detail": "drums.mp3",
+        "id": "9e66c995-580c-41bb-b43a-919a75bd6d5d"
+      },
+      {
+        "title": "trombone",
+        "command": "playAudio",
+        "detail": "trombone.mp3",
+        "id": "19ebee89-74da-4874-9b68-ea73ae256309"
+      },
+      {
+        "title": "center",
+        "command": "playAudio",
+        "detail": "center.mp3",
+        "id": "a2f044ff-5d54-495f-80dd-83f61e998b77"
+      },
+      {
+        "title": "alert",
+        "command": "playAudio",
+        "detail": "alert.mp3",
+        "id": "a4cc10be-f990-408a-9a67-4b10e66fbc4d"
+      },
+      {
+        "title": "honk",
+        "command": "playAudio",
+        "detail": "honk.mp3",
+        "id": "e07b51cd-ffe1-4206-80f3-9f1e5b0840b2"
+      },
+      {
+        "title": "price",
+        "command": "playAudio",
+        "detail": "priceright.mp3",
+        "id": "fa48a174-9723-4477-808e-6ebbd4f3bf6a"
+      },
+      {
+        "title": "hmmm",
+        "command": "playAudio",
+        "detail": "hmm.mp3",
+        "id": "675a6d50-933c-43fc-b6c1-85e916ec3508"
+      },
+      {
+        "command": "playAudio",
+        "detail": "mariodie.mp3",
+        "id": "68ac2518-1335-4a11-a03f-578efd59ce46",
+        "title": "kill"
+      },
+      {
+        "title": "commands",
+        "command": "changeScene",
+        "detail": "commands",
+        "id": "b9873eec-3663-4e54-8676-b5a124cfccce"
+      },
+      {
+        "title": "main",
+        "command": "changeScene",
+        "detail": "Game Scene",
+        "id": "abcba168-74d5-4aa6-a21b-2c87b400b234"
+      },
+      {
+        "title": "hmm",
+        "command": "playAudio",
+        "detail": "hmm.mp3",
+        "id": "29e3e28f-8abb-4c8a-842d-d0e03867f06d"
+      }
+    ]
+  }
+]
