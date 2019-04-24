@@ -1,4 +1,11 @@
-NOTE: Be sure to download this for OBS in order to use the "changeScene" command action: https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466
+RobotStreamer Andromeda
+======
+by TabloidA and Micronurd
+
+
+> ZIP DOWNLOAD LINK: https://drive.google.com/uc?id=1KxW6XlW3Esl2Hs4dQT-Xy_JvHb_B_VgF&export=download
+
+> NOTE: Be sure to download this for OBS in order to use the "changeScene" command action: https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466
 
 1. Unzip RS Andromeda.zip
 2. Create a shortcut to "chat.exe" and place the shortcut anywhere you'd like.
