@@ -3,7 +3,8 @@ const OBSWebSocket = require('obs-websocket-js');
 const obs = new OBSWebSocket();
 const { app, BrowserWindow } = require('electron');
 // const player = require('play-sound')(opts = {player: "C:/Users/aydan/Downloads/mpg123-1.25.10-x86-64/mpg123.exe"});
-const player = require('play-sound')(opts = {player: "C:/Users/aydan/Downloads/mplayer-svn-38117/mplayer.exe"});
+// const player = require('play-sound')(opts = {player: "C:/Users/aydan/Downloads/mplayer-svn-38117/mplayer.exe"});
+const player = require('play-sound')(opts = {});
 const mp3Duration = require('mp3-duration');
 var espeak = require('espeak');
 var wavFileInfo = require('wav-file-info');
@@ -238,19 +239,13 @@ var checkMessageNew = function(msg, jsonFile) {
 
 }
 
-doCommandNew(msg,callback) {
-  
-}
 
 function doCommand(msg, callback) {
-  var output = null;
-  console.log(msg)
+  var output = false;
   let cmds = file[0].commands;
   for (var i = 0; i < cmds.length; i++) {
-    let cmd = "!" + cmds[i].title;
     let msgArgs = msg.split(' ');
-    console.log(msgArgs[0], cmds[i].title);
-    if (msgArgs[0].includes(cmds[i].title)) {
+    if (msgArgs[0].includes('!'+cmds[i].title)) {
       console.log("found command: !"+cmds[i].title);
       if(cmds[i].command == 'changeScene') {
         obs.send('SetCurrentScene', {
@@ -258,14 +253,12 @@ function doCommand(msg, callback) {
         });
       } else if(cmds[i].command == 'playAudio') {
         console.log("is audio command");
+        output = true;
         player.play(audioPath+cmds[i].detail, { mplayer: ['-v', 0.2 ] }, function(err) {
           if (err) throw err
-          return true;
           callback();
         });
       }
-    } else {
-      output = false;
     }
   }
   return output;
