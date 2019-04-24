@@ -191,7 +191,6 @@ var checkMessageNew = function(msg) {
 
 }
 
-
 function doCommand(msg, callback) {
   var output = false;
   let cmds = store.get('config.commands');
