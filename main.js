@@ -12,24 +12,40 @@ const { getAudioDurationInSeconds } = require('get-audio-duration');
 var exec = require('executive');
 
 const fs = require('fs');
-var settingsFileName = './settings.json';
-var file = require(settingsFileName);
-var audioPath = file[0].audioPath;
+
+const Store = require('electron-store');
+const store = new Store();
+var config = {}
+var default_config = {
+    "robotId": "101",
+    "audioPath": "",
+    "commands": [],
+    "chatToken": "xxx"
+}
+// store.set('config',null)
+if (!store.get('config')) {
+    console.log('loading default settings')
+    store.set('config', default_config)
+    console.log('store initalized with config:', config)
+    config = default_config
+} else {
+    config = store.get('config')
+    console.log('settings loaded: ', config)
+}
+var audioPath = store.get('config.audioPath');
 
 const say = require('say');
 const {ipcMain} = require('electron');
 
 const prefix = "!";
-var yourRobotId = file[0].robotId;
+var yourRobotId = store.get('config.robotId');
 var chatmsg = '';
 var messagesToTTS = [];
 var audioToPlay = [];
 var commandFilter = [];
-for (var i = 0; i < file[0].commands.length; i++) {
-  commandFilter.push('!'+file[0].commands[i].title);
+for (var i = 0; i < store.get('config.commands').length; i++) {
+  commandFilter.push('!'+store.get('config.commands')[i].title);
 }
-
-const chatToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX25hbWUiOiJBbmRyb21lZGFCb3QiLCJ1c2VyX2lkIjoiNDA2MTgifQ.PmtqMNec6YKZxiaTE3--uLSPgZRUJRergavTUVPSd3s";
 
 function createWindow () {
   let win = new BrowserWindow({ width: 650, height: 800, minWidth: 620 })
@@ -53,64 +69,45 @@ app.on('activate', () => {
 
 ipcMain.on('addCmd', (event, arg) => {
   let data = JSON.stringify(arg);
-  file[0].commands.push({
+  let cmds = store.get('config.commands')
+  cmds.push({
     title: arg.title,
     command: arg.action,
     detail: arg.value,
     id: arg.id
   })
-  fs.writeFile(settingsFileName, JSON.stringify(file, null, 2), function (err) {
-    if (err) return console.log(err);
-    // console.log(JSON.stringify(file, null, 2));
-    // console.log('writing to ' + settingsFileName);
-  });
+  console.log(cmds);
+  console.log('config:',store.get('config'))
+  store.set('config.commands', cmds)
 });
 ipcMain.on('deleteCmd', (event, arg) => {
-  for (var i = 0; i < file[0].commands.length; i++) {
-    if(file[0].commands[i].id === arg) {
-      file[0].commands.splice(i,1);
-      console.log(file[0].commands)
+  var cmds = store.get('config.commands')
+  for (var i = 0; i < cmds.length; i++) {
+    if(cmds[i].id === arg) {
+      cmds.splice(i,1);
     }
   }
-  fs.writeFile(settingsFileName, JSON.stringify(file, null, 2), function (err) {
-    if (err) return console.log(err);
-    // console.log(JSON.stringify(file, null, 2));
-    // console.log('writing to ' + settingsFileName);
-  });
+  store.set('config.commands', cmds)
 })
 ipcMain.on('getInfo', (event, arg) => {
-  event.sender.send('getInfoReply', file);
+  event.sender.send('getInfoReply', store.get('config'));
   console.log(arg);
 })
 ipcMain.on('updateCmds', (event, arg) => {
-  for (var i = 0; i < file[0].commands.length; i++) {
-    if(file[0].commands[i].id == arg.id) {
-      file[0].commands[i] = arg;
-      console.log(file[0].commands[i])
+  let cmds = store.get('config.commands')
+  for (var i = 0; i < cmds.length; i++) {
+    if(cmds[i].id == arg.id) {
+      cmds[i] = arg;
     }
   }
-  fs.writeFile(settingsFileName, JSON.stringify(file, null, 2), function (err) {
-    if (err) return console.log(err);
-    // console.log(JSON.stringify(file, null, 2));
-    // console.log('writing to ' + settingsFileName);
-  });
+  store.set('config.commands', cmds)
 })
 ipcMain.on('updateId', (event, arg) => {
-  file[0].robotId = arg;
-  yourRobotId = arg;
-  fs.writeFile(settingsFileName, JSON.stringify(file, null, 2), function (err) {
-    if (err) return console.log(err);
-    // console.log(JSON.stringify(file, null, 2));
-    // console.log('writing to ' + settingsFileName);
-  });
+  store.set('config.robotId', arg)
 })
 ipcMain.on('updatePath', (event, arg) => {
-  arg = arg.replace(/\\/g,"/");
-  file[0].audioPath = arg+'/';
-  audioPath = arg+'/';
-  fs.writeFile(settingsFileName, JSON.stringify(file, null, 2), function (err) {
-    if (err) return console.log(err);
-  });
+  arg = arg.replace(/\\/g,"/") + '/';
+  store.set('config.audioPath', arg)
 })
 
 var ws = new WebSocket("ws://45_63_68_108.robotstreamer.com:8769/");
@@ -146,8 +143,8 @@ ws.onmessage = function (event) {
   //console.log("ws client received", event.data);
   //console.log("event.data", event.data);
   let obj = JSON.parse(event.data);
-  if (obj.robot_id == yourRobotId) {
-    checkMessageNew(obj, file);
+  if (obj.robot_id == store.get('config.robotId')) {
+    checkMessageNew(obj);
     // console.log(obj);
   }
 }
@@ -159,24 +156,19 @@ function uuidv4() {
   });
 }
 
-// while (messagesToTTS) {
-//   messagesToTTS.forEach(function(e, i) {
-//
-//   });
-// }
-
 var x = 0;
 var audioLength;
 var soundPlaying = false;
 var loopArray = function(arr) {
     waitForAction(arr[x],arr,function() {
         if(x < arr.length) {
-            loopArray(arr);
+          loopArray(arr);
         } else {
           soundPlaying = false;
         }
     });
 }
+
 function waitForAction(msg,arr,callback) {
       arr.shift();
       if (!doCommand(msg,callback)) {
@@ -187,7 +179,7 @@ function waitForAction(msg,arr,callback) {
       }
 }
 
-var checkMessageNew = function(msg, jsonFile) {
+var checkMessageNew = function(msg) {
   if (msg.message.includes('said '+prefix+'give')) {
     var goal = 100;
     if (msg.username !== "[RS BOT]") {
@@ -232,6 +224,7 @@ var checkMessageNew = function(msg, jsonFile) {
   }
 
   messagesToTTS.push(msg.message);
+
   if (!soundPlaying) {
     loopArray(messagesToTTS);
     soundPlaying = true;
@@ -242,7 +235,7 @@ var checkMessageNew = function(msg, jsonFile) {
 
 function doCommand(msg, callback) {
   var output = false;
-  let cmds = file[0].commands;
+  let cmds = store.get('config.commands');
   for (var i = 0; i < cmds.length; i++) {
     let msgArgs = msg.split(' ');
     if (msgArgs[0].includes('!'+cmds[i].title)) {
@@ -254,7 +247,7 @@ function doCommand(msg, callback) {
       } else if(cmds[i].command == 'playAudio') {
         console.log("is audio command");
         output = true;
-        player.play(audioPath+cmds[i].detail, { mplayer: ['-v', 0.2 ] }, function(err) {
+        player.play(store.get('config.audioPath')+cmds[i].detail, { mplayer: ['-v', 0.2 ] }, function(err) {
           if (err) throw err
           callback();
         });
@@ -273,9 +266,9 @@ var checkMessage = function(msg) {
   } else if (msg.message.includes(prefix+'ping')) {
     chatmsg = JSON.stringify({
       'message': "no u",
-      'token': chatToken,
-      'robot_id': yourRobotId,
-      'gre_token': chatToken
+      'token': store.get('config.chatToken'),
+      'robot_id': store.get('config.robotId'),
+      'gre_token': store.get('config.chatToken')
     });
     ws.send(chatmsg);
   } else if (msg.message.includes(prefix+'tts')) {
