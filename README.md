@@ -4,7 +4,7 @@ RobotStreamer Andromeda
 ======
 by TabloidA and Micronurd
 
-**RS Andromeda**, Pippy's long lost mother. The ultimate tool to improve your stream on Robotstreamer. Create commands that will allow your users to play audio files and control scenes on OBS. More updates coming soon.
+**Andromeda, Pippy's long lost mother.** The ultimate tool to improve your stream on Robotstreamer. Create commands that will allow your users to play audio files and control scenes on OBS. More updates coming soon.
 
 Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 
