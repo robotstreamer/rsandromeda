@@ -2,6 +2,11 @@ RobotStreamer Andromeda
 ======
 by TabloidA and Micronurd
 
+**RS Andromeda**, Pippy's long lost mother. The ultimate tool to improve your stream on Robotstreamer. More updates coming soon.
+
+Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
+
+# How to install
 
 > **ZIP DOWNLOAD LINK:** https://drive.google.com/uc?id=1KxW6XlW3Esl2Hs4dQT-Xy_JvHb_B_VgF&export=download
 
