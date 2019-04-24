@@ -180,6 +180,7 @@ function waitForAction(msg,arr,callback) {
 }
 
 var checkMessageNew = function(msg) {
+  if (msg.tts === false) { return; }
   if (msg.message.includes('said '+prefix+'give')) {
     var goal = 100;
     if (msg.username !== "[RS BOT]") {
