@@ -36,4 +36,4 @@ Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 2. Delete this line: 
 ![startbat texteditor delete](https://i.imgur.com/mFFE9Te.png)
 3. Add this line in it's place (replace [path-to-chat.exe] with the file path to the chat.exe file in your RS Andromeda folder):
-`start /d "RSAndromeda" "[path-to-chat.exe]"`
+`start "" "[path-to-chat.exe]"`
