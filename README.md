@@ -33,7 +33,11 @@ Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 # How to edit start.bat to open RS Andromeda
 
 1. Open your start.bat file in a text editor.
+<<<<<<< HEAD
 2. Delete this line:
+=======
+2. Delete this line: 
+>>>>>>> 73b0f3e0cf9114b642f16f7123e39f1ede5c87a1
 ![startbat texteditor delete](https://i.imgur.com/mFFE9Te.png)
 3. Replace it with this line: (replace [path-to-chat.exe] with the file path to the chat.exe file in your RS Andromeda folder):
 `start "" "[path-to-chat.exe]"`
