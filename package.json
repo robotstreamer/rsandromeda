@@ -22,7 +22,7 @@
 		"text2wav": "0.0.13",
 		"wav-file-info": "0.0.8",
 		"ws": "^6.2.1",
-    "executive": "^1.6.3",
+    		"executive": "^1.6.3"
 	},
 	"devDependencies": {
 		"electron": "^4.1.4",
