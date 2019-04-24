@@ -13,3 +13,5 @@ NOTE: Be sure to download this for OBS in order to use the "changeScene" command
 	- Action Value:
 		- changeScene: Enter what scene you want the command to switch to.
 		- playAudio: Enter the name of the audio file you want to play. (be sure to include the extension)
+
+![example created commands](https://i.imgur.com/EdVcYYs.png)
