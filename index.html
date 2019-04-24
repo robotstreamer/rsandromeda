@@ -101,9 +101,9 @@
     document.addEventListener('DOMContentLoaded', function() {
       list = document.getElementById("list");
       ipcRenderer.on('getInfoReply', (event, arg) => {
-        cmds = arg[0].commands;
-        document.getElementById('robotId').value = arg[0].robotId;
-        document.getElementById('audioPathLabel').innerText = arg[0].audioPath;
+        cmds = arg.commands;
+        document.getElementById('robotId').value = arg.robotId;
+        document.getElementById('audioPathLabel').innerText = arg.audioPath;
 
         for(var i = 0; i < cmds.length; i++) {
           // list.innerHTML += `<div class="savedCommandInfo"><input type="text" class="title-edit" value="${cmds[i].title}"/> <input type="text" class="command-edit" value="${cmds[i].command}"/> <input type="text" class="detail-edit" value="${cmds[i].detail}"/><input type="submit" value="delete" id="deleteCommand"/></div>\n\n`
