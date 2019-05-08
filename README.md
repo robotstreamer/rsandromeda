@@ -29,3 +29,7 @@ Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 		- playAudio: Enter the name of the audio file you want to play. (be sure to include the extension)
 
 ![example created commands](https://i.imgur.com/EdVcYYs.png)
+
+# How to set up !yt
+
+Add a browser source to your scene named "yt". The !yt command will target this.
