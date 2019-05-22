@@ -10,7 +10,7 @@ Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 
 # How to install
 
-> **1.1 ZIP DOWNLOAD LINK:** https://drive.google.com/file/d/1zqPJrEllQy7vHMxzNf9-pdoidLsOG0DX/view?usp=sharing
+> **1.1 ZIP DOWNLOAD LINK:** [CURRENT BUILD IS BROKEN, WILL UPDATE HERE WHEN FIXED]
 
 > **NOTE: Be sure to download this for OBS in order to use the "changeScene" command action:** https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466
 
