@@ -34,4 +34,4 @@ Make sure you go to options, click "Reset Config" and restart the app. This shou
 
 # How to set up !yt
 
-Add a browser source to your scene named "yt". The !yt command will target this.
+In OBS, add a browser source to your scene named "yt". The !yt command will target this.
