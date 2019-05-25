@@ -10,7 +10,9 @@ Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 
 # How to install
 
-> **1.1 ZIP DOWNLOAD LINK:** [CURRENT BUILD IS BROKEN, WILL UPDATE HERE WHEN FIXED]
+> **1.0.2 ZIP DOWNLOAD LINK:** https://www.dropbox.com/s/35wadthoukx5n4x/RSAndromeda%201.0.1.zip?dl=1
+AFTER YOU FINISH DOWNLOADING:
+Make sure you go to options, click "Reset Config" and restart the app. This should fix any issues you had with TTS and commands not working. This however means you'll have to redefine the audio folder, set your Robot ID, and remake all of your commands.
 
 > **NOTE: Be sure to download this for OBS in order to use the "changeScene" command action:** https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466
 
