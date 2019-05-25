@@ -10,7 +10,9 @@ Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 
 # How to install
 
-> **ZIP DOWNLOAD LINK:** https://drive.google.com/uc?id=1ErCpsOKbDIF6obR_TXFuw_-69gWhAlWt&export=download
+> **1.0.2 ZIP DOWNLOAD LINK:** https://www.dropbox.com/s/6y6ykrtrazeaaro/RS%20Andromeda%201.0.2.zip?dl=1
+AFTER YOU FINISH DOWNLOADING:
+Make sure you go to options, click "Reset Config" and restart the app. This should fix any issues you had with TTS and commands not working. This however means you'll have to redefine the audio folder, set your Robot ID, and remake all of your commands.
 
 > **NOTE: Be sure to download this for OBS in order to use the "changeScene" command action:** https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466
 
@@ -30,14 +32,6 @@ Send any bugs and/or suggestions to **TabloidA#9083** on Discord.
 
 ![example created commands](https://i.imgur.com/EdVcYYs.png)
 
-# How to edit start.bat to open RS Andromeda
+# How to set up !yt
 
-1. Open your start.bat file in a text editor.
-<<<<<<< HEAD
-2. Delete this line:
-=======
-2. Delete this line: 
->>>>>>> 73b0f3e0cf9114b642f16f7123e39f1ede5c87a1
-![startbat texteditor delete](https://i.imgur.com/mFFE9Te.png)
-3. Replace it with this line: (replace [path-to-chat.exe] with the file path to the chat.exe file in your RS Andromeda folder):
-`start "" "[path-to-chat.exe]"`
+In OBS, add a browser source to your scene named "yt". The !yt command will target this.
