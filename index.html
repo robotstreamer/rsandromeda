@@ -33,8 +33,8 @@
       <div class="inputRow">
         <span class="setCommandsTitle">Command Action:</span>
         <select id="action" name="action">
-          <option value="changeScene">changeScene</option>
           <option value="playAudio">playAudio</option>
+          <option value="changeScene">changeScene</option>
         </select>
       </div>
       <div class="inputRow">
@@ -48,6 +48,12 @@
   </div>
 
   <div id="content-bar-options">
+    <div class="headerContain"><span class="Header">RESET CONFIG</span><span class="Hint">Resets your config</span></div>
+    <button type="button" name="resetConfig" id="resetConfig">RESET CONFIG</button>
+
+    <div class="headerContain"><span class="Header">TOGGLE YT COMMAND</span><span class="Hint">Enable/Disable the !yt [link] [time] command.</span></div>
+    <input type="checkbox" id="toggleYT">
+
     <div class="headerContain"><span class="Header">SET ROBOT ID</span><span class="Hint">Enter the Robot ID of the stream you want to check for cmds.</span></div>
     <input type="text" id="robotId" maxlength="3" placeholder="Place the Robot ID of your stream here." value="0"/>
 
@@ -63,9 +69,15 @@
     const {ipcRenderer} = require('electron');
     var list;
 
+    document.getElementById('resetConfig').addEventListener('click', () => resetConfig());
+
     document.getElementById('commandsLink').addEventListener('click', () => openPage('commands'));
     document.getElementById('optionsLink').addEventListener('click', () => openPage('options'));
     document.getElementById('donationsLink').addEventListener('click', () => openPage('donations'));
+
+    function resetConfig() {
+      ipcRenderer.send('resetConfig');
+    }
 
     function openPage(page) {
       if (page == "commands") {
@@ -98,16 +110,23 @@
     }
     document.getElementById('audioPath').onchange = updatePath;
 
+    var updateYT = function() {
+      let yt = document.getElementById("toggleYT").checked;
+      ipcRenderer.send('updateYT', yt);
+    }
+    document.getElementById('toggleYT').onchange = updateYT;
+
     document.addEventListener('DOMContentLoaded', function() {
       list = document.getElementById("list");
       ipcRenderer.on('getInfoReply', (event, arg) => {
         cmds = arg.commands;
         document.getElementById('robotId').value = arg.robotId;
         document.getElementById('audioPathLabel').innerText = arg.audioPath;
+        document.getElementById("toggleYT").checked = arg.toggleYT;
 
         for(var i = 0; i < cmds.length; i++) {
           // list.innerHTML += `<div class="savedCommandInfo"><input type="text" class="title-edit" value="${cmds[i].title}"/> <input type="text" class="command-edit" value="${cmds[i].command}"/> <input type="text" class="detail-edit" value="${cmds[i].detail}"/><input type="submit" value="delete" id="deleteCommand"/></div>\n\n`
-          createNewCmdDiv(cmds[i].title, cmds[i].command, cmds[i].detail, cmds[i].id, list);
+          createNewCmdDiv(cmds[i].title, cmds[i].command, cmds[i].detail, cmds[i].isEnabled, cmds[i].id, list);
         }
       })
       ipcRenderer.send('getInfo', "test")
@@ -120,7 +139,9 @@
       });
     }
 
-    var createNewCmdDiv = function(title, command, detail, id, list) {
+    var createNewCmdDiv = function(title, command, detail, isEnabled, id, list) {
+      console.log(isEnabled);
+
       let container = document.createElement('div');
       container.className = 'savedCommandInfo';
 
@@ -146,6 +167,12 @@
       deleteButtonSuckMyAssMicroNurd.innerText = 'delete';
       container.appendChild(deleteButtonSuckMyAssMicroNurd);
 
+      let isEnabledToggle = document.createElement('input');
+      isEnabledToggle.type = 'checkbox';
+      isEnabledToggle.className = 'is-enabled-edit';
+      isEnabledToggle.checked = isEnabled;
+      container.appendChild(isEnabledToggle);
+
       deleteButtonSuckMyAssMicroNurd.addEventListener('click', function(e) {
         ipcRenderer.send('deleteCmd', id);
         list.removeChild(container);
@@ -155,11 +182,13 @@
         let title = titleInput.value;
         let command = commandInput.innerText;
         let detail = detailInput.value;
+        let toggle = isEnabledToggle.checked;
         console.log(title,command,detail);
         let updateJson = {
           title: title,
           command: command,
           detail: detail,
+          isEnabled: toggle,
           id: id
         };
         ipcRenderer.send('updateCmds', updateJson);
@@ -167,6 +196,7 @@
       titleInput.onchange = updateInput;
       commandInput.onchange = updateInput;
       detailInput.onchange = updateInput;
+      isEnabledToggle.onchange = updateInput;
 
       list.appendChild(container);
     }
@@ -176,6 +206,7 @@
       let action = document.getElementById("action").value;
       let value = document.getElementById("value").value;
       let alert = document.getElementById("alert");
+      let isEnabled = true;
 
       if (action == "playAudio" && !value.includes(".mp3")) {
         alert("playAudio commands require an mp3 file for an Action Value");
@@ -184,6 +215,7 @@
           title: title,
           action: action,
           value: value,
+          isEnabled: true,
           id: uuidv4()
         });
         // list.innerHTML += `<div class="savedCommandInfo"><input type="text" class="title-edit" value="${title}"/> <input type="text" class="command-edit" value="${action}"/> <input type="text" class="detail-edit" value="${value}"/><input type="submit" value="delete" id="deleteCommand"/></div>\n\n`

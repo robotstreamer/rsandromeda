@@ -1,3 +1,7 @@
+:root {
+  --highlight: #A36CE7;
+}
+
 body, html {
   margin: 0;
   font-family: 'Overpass', sans-serif;
@@ -58,11 +62,11 @@ body, html {
   text-align: center;
   line-height: 50px;
   /* color: rgba(240,240,240,0.7); */
-  font-weight: 500;
+  font-weight: 900;
 }
 
 .navlink:hover {
-  color: #1dd1a1;
+  color: var(--highlight);
 }
 
 .navlink {
@@ -70,8 +74,8 @@ body, html {
 }
 
 .activelink {
-  color: #1dd1a1;
-  border-bottom: 3px solid #1dd1a1;
+  color: var(--highlight);
+  border-bottom: 3px solid var(--highlight);
   font-weight: 900;
   cursor:pointer;
   box-sizing: border-box;
@@ -154,7 +158,7 @@ body, html {
   border-radius: 3px;
   border: 0;
   color: #33333B;
-  background: #1dd1a1;
+  background: var(--highlight);
   font-weight: 900;
   position: relative;
   left: 50%;

@@ -11,17 +11,44 @@
       margin: 0;
       padding: 5px;
       font-family: 'Overpass', sans-serif;
-    }
-    #pop {
-      transform: translateX(-300px);
-      transition: transform 800ms cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+      overflow:hidden;
     }
   </style>
 </head>
 
 <body style="background: red;">
   <div id="marqueeContainer">
-
+    <marquee id="marqueeText" scrollamount="15">
+      <span id="name">ballz</span> donated
+      <span id="amount">two bal</span> funbits!
+      <span id="msg" style="">suck my thicc ballsackss!!! XDDDDD</span>
+    </marquee>
   </div>
+
+  <script type="text/javascript">
+  window.onload = function() {
+    function getUrlVars() {
+      var vars = {};
+      var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+          vars[key] = value;
+      });
+      return vars;
+    }
+    var vars = getUrlVars();
+    console.log(vars);
+
+    var name = document.getElementById('name');
+    name.textContent = decodeURI(vars.name);
+    var amount = document.getElementById('amount');
+    amount.textContent = decodeURI(vars.amount);
+    var message = document.getElementById('msg');
+
+    var marquee = document.getElementById('marqueeContainer');
+    marquee.style.transform = "translateY(0)";
+    setTimeout(function () {
+      marquee.style.transform = "translateY(100px)";
+    }, 25 * 1000);
+  }
+  </script>
 </body>
 </html>
