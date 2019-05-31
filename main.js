@@ -243,7 +243,7 @@ var loopArray = function(arr) {
 function waitForAction(msg,arr,callback) {
       arr.shift();
       if (!doCommand(msg,callback)) {
-        exec.quiet('espeak "'+msg.substr(0,75)+'"', function() {
+	exec.quiet('espeak "'+msg.replace(/\"/g, '|').substr(0,75)+'"', function() {
           console.log("end of file");
           callback();
         });
