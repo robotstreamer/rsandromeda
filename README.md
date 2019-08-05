@@ -37,8 +37,9 @@ In OBS, add a browser source to your scene named "yt". The !yt command will targ
 
 # Known Bugs + Fixes
 
-- If espeak doesn't work on first start up, download and run this download (link leads straight to a download, don't be alarmed):
+- If espeak doesn't work on first start up, download and run this file (link leads straight to a download, don't be alarmed):
 http://sourceforge.net/projects/espeak/files/espeak/espeak-1.48/setup_espeak-1.48.04.exe
+Then restart Andromeda.
 
 - If you get an error that looks like this:
 ![example created commands](https://i.imgur.com/zaq5F6M.png)
