@@ -16,7 +16,7 @@ Make sure you go to options, click "Reset Config" and restart the app. This shou
 > **NOTE: Be sure to download this for OBS in order to use the "changeScene" command action:** https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466
 
 1. Unzip RS Andromeda.zip
-2. Create a shortcut to "chat.exe" and place the shortcut anywhere you'd like.
+2. Create a shortcut to the .exe file with a purple icon and place the shortcut anywhere you'd like.
 3. Create a folder someone easily accessible on your computer, name it whatever you want! This will be what you keep your audio clips in.
 4. Open the chat.exe shortcut you made earlier.
 (Windows might mark the app as suspicious, let it run.)
@@ -34,3 +34,13 @@ Make sure you go to options, click "Reset Config" and restart the app. This shou
 # How to set up !yt
 
 In OBS, add a browser source to your scene named "yt". The !yt command will target this.
+
+# Known Bugs + Fixes
+
+- If espeak doesn't work on first start up, download and run this download (link leads straight to a download, don't be alarmed):
+http://sourceforge.net/projects/espeak/files/espeak/espeak-1.48/setup_espeak-1.48.04.exe
+
+- If you get an error that looks like this:
+![example created commands](https://i.imgur.com/zaq5F6M.png)
+
+Go to %appdata%, locate the "chat" folder, and delete it. Then restart Andromeda.
