@@ -254,7 +254,7 @@ var checkMessageNew = function(msg) {
   if (msg.tts === false) { return; }
 
   let isYtToggled = store.get('config.toggleYT');
-  if (msg.message.includes(prefix+'yt') && isYtToggled) {
+  if (msg.message.includes(prefix+'yt ') && isYtToggled) {
     var args = msg.message.split(' ');
     var key = args[1].replace('https://www.youtube.com/watch?v=','');
     var time = args[2];
