@@ -12,7 +12,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "electron": "^3.1.8",
+        "electron": "^18.3.7",
         "electron-store": "^3.2.0",
         "espeak": "0.0.3",
         "executive": "^1.6.3",
